@@ -1,0 +1,58 @@
+{
+	"browsers": {
+		"chrome": {
+			"executable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+			"profilePath": "C:\\Users\\tyuns\\AppData\\Local\\Google\\Chrome\\User Data\\Profile"
+		},
+		"firefox": {
+			"executable": "",
+			"profilePath": ""
+		},
+		"opera": {
+			"executable": "",
+			"profilePath": ""
+		}
+	},
+	"libraries": {
+		"GOG": {
+			"installedGames": {
+				"game1": {
+					"executable": "",
+					"launcher": ""
+				},
+				"game2": {
+					"executable": "",
+					"launcher": ""
+				}
+			},
+			"libraryPath": ""
+		},
+		"steam": {
+			"installedGames": {
+				"game1": {
+					"executable": "",
+					"launcher": ""
+				},
+				"game2": {
+					"executable": "",
+					"launcher": ""
+				}
+			},
+			"libraryPath": ""
+		}
+	},
+	"navigationURLs": {
+		"automationTargetPage": "chrome://version/",
+		"automationTargetsLanding": "",
+		"default": "chrome://version/",
+		"stealthCheck1": "https://browserleaks.com/ip",
+		"stealthCheck2": "https://www.whatismybrowser.com"
+	},
+	"selectors": {
+		"downloadFile": "//span[text()=' Download ']",
+		"filesTab": "(//span[text()='Files'])[1]",
+		"manualDownload": "(//span[text()='Manual download'])[1]",
+		"modLinks": ".tracking-title a",
+		"nextPage": ".paginate_button.next"
+	}
+}
