@@ -41,18 +41,16 @@
 			"libraryPath": ""
 		}
 	},
-	"navigationURLs": {
-		"automationTargetPage": "chrome://version/",
-		"automationTargetsLanding": "",
-		"default": "chrome://version/",
-		"stealthCheck1": "https://browserleaks.com/ip",
-		"stealthCheck2": "https://www.whatismybrowser.com"
-	},
-	"selectors": {
-		"downloadFile": "//span[text()=' Download ']",
-		"filesTab": "(//span[text()='Files'])[1]",
-		"manualDownload": "(//span[text()='Manual download'])[1]",
-		"modLinks": ".tracking-title a",
-		"nextPage": ".paginate_button.next"
+	"detectionURLs": {
+		"browserleaks": {
+			"landing": "https://browserleaks.com",
+			"ip": "https://browserleaks.com/ip",
+			"javascript": "https://browserleaks.com/javascript",
+			"canvas": "https://browserleaks.com/canvas",
+			"webGL": "https://browserleaks.com/webgl",
+			"fonts": "https://browserleaks.com/fonts",
+			"geo": "https://browserleaks.com/geo",
+			"proxy": "https://browserleaks.com/proxy"
+		}
 	}
 }
