@@ -1,12 +1,13 @@
 /**
- * @file jsonManager.js
+ * @file ConfigurationManager.js
  *
  * @version 0.0.1
  *
- * @summary Manages configuration data for the application.
+ * @summary Manages all the applications required JSON operations.
  *
- * @description This module provides functionality for loading, verifying,
- * modifying, and saving configuration files.
+ * @description This file is responsible for handling all the projects JSON
+ * operations including functionality like loading data, verifying data,
+  overriding keys, and saving new configuration settings files.
  *
  * @requires fs - File system module for file I/O.
  * @requires path - Path module for handling and transforming file paths.
@@ -47,8 +48,8 @@ class ConfigurationManager {
 	 *
 	 * @summary Reads configuration data from the file.
 	 *
-	 * @description Reads and parses the configuration file, logging
-	 * `appropriate messages for success or errors.
+	 * @description Responsible for reading, and serving the contents of a
+	 * .config file.
 	 *
 	 * @returns {Object} A parsed configuration data or an empty object if
 	 * the file doesn't exist or errors occur.
@@ -150,8 +151,30 @@ class ConfigurationManager {
 	 *
 	 * @summary Configures requested browsers.
 	 *
-	 * @description Configures all browsers or a specific browser based on user
-	 * choice.
+	 * @description This method configures one or more browsers based on user
+	 * input. If the user selects "all," all available browsers are configured
+	 * concurrently. Otherwise, the method configures the specified browser
+	 * individually.
+	 *
+	 * @param {string} browserChoice - The user's choice of browser(s) to
+	 * configure.
+	 * Accepted values are:
+	 *   - `"all"`: Configures all browsers in the provided list.
+	 *   - A specific browser name (e.g., `"chrome"`, `"firefox"`): Configures
+	 * only that browser.
+	 *
+	 * @param {Array<string>} browsers - An array of browser names available
+	 * for configuration.
+	 *
+	 * @returns {Promise<void>} Resolves once all requested browser configurations are complete.
+	 *
+	 * @example
+	 * // Configure all browsers
+	 * await getRequestedBrowserSetup("all", ["chrome", "firefox"]);
+	 *
+	 * @example
+	 * // Configure a specific browser
+	 * await getRequestedBrowserSetup("chrome", ["chrome", "firefox"]);
 	 */
 	async getRequestedBrowserSetup(browserChoice, browsers) {
 		if (browserChoice === "all") {
@@ -168,8 +191,22 @@ class ConfigurationManager {
 	 *
 	 * @summary Configures a specific browser.
 	 *
-	 * @description Collects and validates user input for browser executable
-	 * and profile paths, updating buffered changes.
+	 * @description This method collects user input to retrieve and validate
+	 * the paths for the browser executable and profile. If the provided paths
+	 * are valid, they are buffered for later updates in the configuration.
+	 *
+	 * @param {string} browser - The name of the browser to configure (e.g.,
+	 * `"chrome"`, `"firefox"`).
+	 *
+	 * @returns {Promise<void>} Resolves once the browser configuration is
+	 * complete.
+	 *
+	 * @throws {Error} Throws an error if browser-specific user input cannot be
+	 * collected.
+	 *
+	 * @example
+	 * Configure Chrome browser;
+	 * await configureBrowser("chrome");
 	 */
 	async configureBrowser(browser) {
 		const { executablePath, profilePath } =
@@ -193,9 +230,19 @@ class ConfigurationManager {
 	/**
 	 * @function getBrowserUserInputs
 	 *
-	 * @summary
+	 * @summary Collects user input for a browser's executable and profile
+	 * paths.
 	 *
-	 * @description
+	 * @description This method prompts the user to input the executable path
+	 * and profile path for a given browser. It returns an object containing
+	 * the collected values.
+	 *
+	 * @param {string} browser - The name of the browser for which user input
+	 * is requested.
+	 *
+	 * @returns {Object} An object containing:
+	 *   - `executablePath` {string}: The path to the browser executable.
+	 *   - `profilePath` {string}: The path to the browser profile directory.
 	 */
 	getBrowserUserInputResults(browser) {
 		const executablePath = this.promptUserInput(`${browser}Executable`, "");
@@ -204,11 +251,28 @@ class ConfigurationManager {
 	}
 
 	/**
-	 * @function isPathValid
+	 * @function setBufferedConfigKey
 	 *
-	 * @summary
+	 * @summary Buffers configuration changes for a given key.
 	 *
-	 * @description
+	 * @description This method updates a buffered configuration key with a new
+	 * value. If the key already exists and its value differs, it prompts the
+	 * user to confirm whether to override the existing value. If the user
+	 * confirms, the key is updated in the buffered changes.
+	 *
+	 * @param {string} configKey - The configuration key to update (e.g.,
+	 * `"browsers.chrome.executable"`).
+	 * @param {any} configValue - The new value to set for the configuration
+	 * key.
+	 *
+	 * @returns {Promise<void>} Resolves once the key has been updated in the
+	 * buffer
+	 * or the operation is skipped.
+	 *
+	 * @throws {Error} Throws if confirmation fails unexpectedly.
+	 *
+	 * @example
+	 * await setBufferedConfigKey("browsers.chrome.executable", "/path/to/chrome");
 	 */
 	async setBufferedConfigKey(configKey, configValue) {
 		if (
