@@ -15,8 +15,8 @@
  * @exports BrowserManager
  */
 
-const { chromium } = require("playwright-extra");
-const PageManager = require("./ConfigurationManager");
+import { chromium } from "playwright-extra";
+/* @TODO const PageManager = require("./ConfigurationManager"); */
 
 /**
  * @class BrowserManager
@@ -27,7 +27,7 @@ const PageManager = require("./ConfigurationManager");
  * manage Chromium browser instances with custom configurations such as
  * profiles and executable paths.
  */
-class BrowserManager {
+export class BrowserManager {
 	/**
 	 * @function launchBrowser
 	 *
@@ -46,7 +46,7 @@ class BrowserManager {
 	 * @returns {Promise<import('playwright').BrowserContext>} A promise that
 	 * resolves to the launched Chromium browser context.
 	 */
-	static async launchBrowser({ chromeExecutable, chromeProfilePath }) {
+	async launchBrowser({ chromeExecutable, chromeProfilePath }) {
 		console.log("Launching ${chromeExecutable} Browser...");
 		return await chromium.launchPersistentContext(chromeProfilePath, {
 			headless: false,
@@ -62,5 +62,3 @@ class BrowserManager {
 		});
 	}
 }
-
-module.exports = BrowserManager;
