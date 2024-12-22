@@ -23,9 +23,12 @@ import { chromium } from "playwright-extra";
  *
  * @summary Provides utilities for managing browser instances.
  *
- * @description The `BrowserManager` class contains methods to launch and
- * manage Chromium browser instances with custom configurations such as
- * profiles and executable paths.
+ * @description Class providing the functionality to manage a Chromium browser
+ * instance with a custom configuration (browser and executable path).
+ *
+ * @example
+ * const browserManager = new BrowserManager();
+ * const browser = await browserManager.launchBrowser({absolute_path_to_Chrome}, * absolute_path_to_chrome_profile});
  */
 export class BrowserManager {
 	/**

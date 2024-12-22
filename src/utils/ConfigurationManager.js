@@ -7,7 +7,7 @@
  *
  * @description This file is responsible for handling all the projects JSON
  * operations including functionality like loading data, verifying data,
-  overriding keys, and saving new configuration settings files.
+ * overriding keys, and saving new configuration settings files.
  *
  * @requires fs - File system module for file I/O.
  * @requires path - Path module for handling and transforming file paths.
@@ -17,13 +17,13 @@
  *
  * @exports ConfigurationManager
  */
-const fs = require("fs");
-const _ = require("lodash");
-const path = require("path");
-const prompt = require("prompt-sync")();
-const VisualLogManager = require("../lib/VisualLogManager");
+import _ from "lodash";
+/* import path from "path"; */
+import fs from "fs/promises";
+import prompt from "prompt-sync";
+import VisualLogManager from "../lib/VisualLogManager.js";
 
-class ConfigurationManager {
+export default class ConfigurationManager {
 	/**
 	 * @constructor
 	 *
@@ -35,12 +35,9 @@ class ConfigurationManager {
 	constructor(configFileName) {
 		this.logger = VisualLogManager;
 		this.configFileName = configFileName;
-		this.configFilePath = path.resolve(
-			__dirname,
-			"../../configs/config.json",
-		);
-		this.bufferedChanges = {};
+		/* this.configFilePath = path.resolve(); */
 		this.configData = {};
+		this.bufferedChanges = {};
 	}
 
 	/**
@@ -48,8 +45,8 @@ class ConfigurationManager {
 	 *
 	 * @summary Reads configuration data from the file.
 	 *
-	 * @description Responsible for reading, and serving the contents of a
-	 * .config file.
+	 * @description Provides functionality for reading, and capturing the
+	 * contents of a file.
 	 *
 	 * @returns {Object} A parsed configuration data or an empty object if
 	 * the file doesn't exist or errors occur.
@@ -86,10 +83,10 @@ class ConfigurationManager {
 	/**
 	 * @function setConfigData
 	 *
-	 * @summary Responsible for saving any changes or pending updates stores in * `bufferedChanges` to the configuration file.
+	 * @summary Provides the functionality for saving updates that are stored
+	 * in `bufferedChanges` to the specified configuration file.
 	 *
-	 * @description Merges buffered changes with existing configuration and
-	 * writes them to the configuration file.
+	 * @description Saves and merges the in `bufferedChanges` to the file
 	 */
 	async setConfigData() {
 		try {
@@ -142,7 +139,6 @@ class ConfigurationManager {
 
 		const browserChoice = await this.getUserBrowserChoice();
 		await this.getRequestedBrowserSetup(browserChoice, browsers);
-
 		await this.setConfigData();
 	}
 
@@ -166,7 +162,8 @@ class ConfigurationManager {
 	 * @param {Array<string>} browsers - An array of browser names available
 	 * for configuration.
 	 *
-	 * @returns {Promise<void>} Resolves once all requested browser configurations are complete.
+	 * @returns {Promise<void>} Resolves once all requested browser configs.
+	 * completed are complete.
 	 *
 	 * @example
 	 * // Configure all browsers
@@ -270,9 +267,6 @@ class ConfigurationManager {
 	 * or the operation is skipped.
 	 *
 	 * @throws {Error} Throws if confirmation fails unexpectedly.
-	 *
-	 * @example
-	 * await setBufferedConfigKey("browsers.chrome.executable", "/path/to/chrome");
 	 */
 	async setBufferedConfigKey(configKey, configValue) {
 		if (
@@ -292,9 +286,16 @@ class ConfigurationManager {
 	/**
 	 * @function isPathValid
 	 *
-	 * @summary
+	 * @summary Checks to see if the configuration key is a valid path
 	 *
-	 * @description
+	 * @description Provides the functionality to validate if the configuration
+	 * path passed is a valid path.
+	 *
+	 * @param {string} pathToCheck - The path to validate.
+	 * @param {boolean} isExecutable - Flag to determine if the path should be
+	 * an executable file.
+	 *
+	 * @returns {Boolean} True if the path is valid, otherwise false.
 	 */
 	async isPathValid(pathToCheck, isExecutable) {
 		try {
@@ -324,9 +325,22 @@ class ConfigurationManager {
 	/**
 	 * @function promptUserInput
 	 *
-	 * @summary
+	 * @summary Prompts the user for input with an optional default value.
 	 *
-	 * @description
+	 * @description This method requests user input for a specified key. If no
+	 * input is provided it applies the default value. Logs are generated to
+	 * document the interaction and the value used.
+	 *
+	 * @param {string} key - The key or prompt label for which input is
+	 * requested (e.g., `"chromeExecutable"`).
+	 * @param {string} defaultPath - The default value to use if the user
+	 * provides no input.
+	 *
+	 * @returns {string} The value provided by the user or the default value.
+	 *
+	 * @example
+	 * const userInput = promptUserInput("chromeExecutable",
+	 * "/path/to/chrome");
 	 */
 	promptUserInput(key, defaultPath) {
 		this.logger.info(`Provide a value for "${key}":`);
@@ -353,11 +367,12 @@ class ConfigurationManager {
 	 * false.
 	 */
 	async confirmKeyOverride(key, currentValue, newValue) {
+		let response;
 		do {
 			await this.logger.info(
 				`"${key}" already exists, and is currently assigned to the value "${currentValue}". \n\t Are you sure you would like to override this key, and replace it with Replace with "${newValue}"? (yes/no):`,
 			);
-			let response = prompt("Enter your choice: ").toLowerCase();
+			response = prompt("Enter your choice: ").toLowerCase();
 			if (response !== "yes" && response !== "no") {
 				await this.logger.warning(
 					`\nInvalid input received for key override confirmation: ${response}`,
@@ -381,5 +396,3 @@ class ConfigurationManager {
 		return JSON.stringify(this.configData, null, 2);
 	}
 }
-
-module.exports = ConfigurationManager;
