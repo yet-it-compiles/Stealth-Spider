@@ -1,10 +1,10 @@
 /**
  * @module prettierrc.config
  *
- * @summary Prettier Configuration
+ * @summary Prettier Formatting Configuration
  *
- * @description This file  the projects formatting style and standards using
- * prettier.
+ * @description Provides the projects formatting style and Node.js development
+ * standards using Prettier.
  *
  * @requires prettier
  *
