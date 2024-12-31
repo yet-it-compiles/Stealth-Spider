@@ -1,0 +1,30 @@
+# Minified files
+*.min.js
+*.min.jsx
+*.min.css
+*.min.scss
+
+# Ignore Jest snapshot files
+*.snap
+
+# Ignore documentations files
+*.md
+*.log
+
+# Ignore editor-specific files
+.idea/
+.vscode/
+.code-workspace
+
+# Ignore package manager lockfiles
+package-lock.json
+
+# Ignore temporary and backup files
+*.tmp
+*.bak
+
+# Ignore node_modules and build output
+dist/
+build/
+coverage/
+node_modules/
