@@ -1,28 +1,48 @@
 /**
  * @file jest.setup.js
  *
- * @summary Jest Testing Setup
+ * @version 1.0.0
  *
- * @description
+ * @summary Jest Testing Setup for a React + Playwright Project
  *
- * @requires @testing-library/jest-dom - Provides custom match DOM nodes
+ * @description Centralized setup for Jest testing, including environment
+ * initialization, mocking of Node.js core modules (`fs`, `path`), and
+ * integration with React testing utilities.
  *
- * @see {@link https://testing-library.com/docs/dom-testing-library/api-queries/
- * DOM Testing Library Documentation}
- * @see {@link https://jestjs.io/docs/mock-function-api Jest Mock Function API}
+ * @requires fs - Node.js file system module.
+ * @requires path - Node.js path module for path-related operations.
+ * @requires jest/globals - Jest globals for test lifecycle management.
+ *
+ * @see https://jestjs.io/docs/mock-function-api Jest Mock Function API}
+ *
+ * @exports
  */
-
-import "@testing-library/jest-dom";
-import { jest, afterEach } from "@jest/globals";
+import '@testing-library/jest-dom';
+import { jest, afterEach, beforeAll } from '@jest/globals';
 
 if (!globalThis.fetch) {
-	globalThis.fetch = jest.fn(() =>
-		Promise.resolve({
-			json: () => Promise.resolve({}),
-		}),
-	);
+    globalThis.fetch = jest.fn(() =>
+        Promise.resolve({
+            json: () => Promise.resolve({}),
+            text: () => Promise.resolve(''),
+        }),
+    );
 }
 
-afterEach(() => {
-	jest.clearAllMocks();
+globalThis.console = {
+    ...console,
+    log: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+};
+
+beforeAll(() => {
+    console.info('[jest.setup.js] Jest environment initialized.');
 });
+
+afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+});
+
+console.info('[jest.setup.js] Test setup completed.');

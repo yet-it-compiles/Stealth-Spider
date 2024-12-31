@@ -1,61 +1,68 @@
 /**
- * @module eslint.config
+ * @file eslint.config.js
  *
- * @summary ESLint configuration.
+ * @version 1.0.0
  *
- * @description Defines the projects linting standards using ESlint rules
+ * @summary ESLint linting configuration file.
  *
- * @requires eslint-plugin-security
- * @requires eslint-plugin-prettier
+ * @description Defines the code styling and file formatting configuration
+ * across the projects stack using ESLint and integrated Prettier.
  *
- * @see https://eslint.org/docs/rules/ link to ESLint documentation
+ * @requires js - ESLint's default configuration for JavaScript.
+ * @requires react - ESLint plugin for React-specific linting rules.
+ * @requires globals - Provides global variables for browser environments.
+ * @requires react-hooks - ESLint plugin for enforcing React Hooks rules.
+ * @requires react-refresh - ESLint plugin for React Refresh during development
  *
- * @exports {object} ESLint configuration object.
+ * @see @see https://vitejs.dev/ link to official vite documentation
+ * @see https://eslint.org/docs/latest/ link to official eslint documentation
+ *
+ * @exports Object - ESLint configuration object
  */
-import security from "eslint-plugin-security";
-import prettier from "eslint-plugin-prettier";
-import importPlugin from "eslint-plugin-import";
+import js from '@eslint/js';
+import globals from 'globals';
+import reactPlugin from 'eslint-plugin-react';
+import prettierPlugin from 'eslint-plugin-prettier';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import reactRefreshPlugin from 'eslint-plugin-react-refresh';
 
-export default [
-	{
-		files: ["**/*.js"],
-		ignores: ["node_modules/**", "dist/**", "*.test.js"],
-
-		languageOptions: {
-			sourceType: "module",
-			globals: {
-				process: "readonly",
-				__dirname: "readonly",
-				module: "readonly",
-			},
-		},
-
-		plugins: {
-			security,
-			prettier,
-			import: importPlugin,
-		},
-
-		rules: {
-			"no-console": ["warn", { allow: ["warn", "error"] }],
-			"prefer-const": "error",
-			"no-unused-vars": ["warn", { args: "after-used" }],
-
-			"import/order": [
-				"error",
-				{
-					groups: [
-						"builtin",
-						"external",
-						"internal",
-						"parent",
-						"sibling",
-						"index",
-					],
-					"newlines-between": "always",
-					alphabetize: { order: "asc", caseInsensitive: true },
-				},
-			],
-		},
-	},
-];
+export default {
+    files: ['src/**/*.{js,jsx}'],
+    ignores: ['dist/**', 'node_modules/**'],
+    languageOptions: {
+        globals: {
+            ...globals.node,
+            ...globals.browser,
+            ...globals.es2021,
+        },
+        parserOptions: {
+            ecmaVersion: 2022,
+            ecmaFeatures: { jsx: true },
+            sourceType: 'module',
+        },
+    },
+    settings: {
+        react: { version: 'detect' },
+    },
+    plugins: {
+        react: reactPlugin,
+        prettier: prettierPlugin,
+        'react-hooks': reactHooksPlugin,
+        'react-refresh': reactRefreshPlugin,
+    },
+    rules: {
+        ...js.configs.recommended.rules,
+        ...reactPlugin.configs.recommended.rules,
+        ...reactPlugin.configs['jsx-runtime'].rules,
+        ...reactHooksPlugin.configs.recommended.rules,
+        ...prettierPlugin.configs.recommended.rules,
+        'react/jsx-no-target-blank': 'off',
+        'react-refresh/only-export-components': [
+            'warn',
+            { allowConstantExport: true },
+        ],
+        'indent': ['error', 4],
+        'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+        'prettier/prettier': 'error',
+    },
+};
