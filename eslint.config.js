@@ -14,7 +14,7 @@
  * @requires react-hooks - ESLint plugin for enforcing React Hooks rules.
  * @requires react-refresh - ESLint plugin for React Refresh during development
  *
- * @see @see https://vitejs.dev/ link to official vite documentation
+ * @see https://vitejs.dev/ link to official vite documentation
  * @see https://eslint.org/docs/latest/ link to official eslint documentation
  *
  * @exports Object - ESLint configuration object
@@ -32,11 +32,12 @@ export default {
     languageOptions: {
         globals: {
             ...globals.node,
-            ...globals.browser,
             ...globals.es2021,
+            ...globals.browser,
+
         },
         parserOptions: {
-            ecmaVersion: 2022,
+            ecmaVersion: latest,
             ecmaFeatures: { jsx: true },
             sourceType: 'module',
         },
@@ -45,24 +46,29 @@ export default {
         react: { version: 'detect' },
     },
     plugins: {
-        react: reactPlugin,
-        prettier: prettierPlugin,
+        'react': reactPlugin,
+        'prettier': prettierPlugin,
         'react-hooks': reactHooksPlugin,
         'react-refresh': reactRefreshPlugin,
     },
     rules: {
-        ...js.configs.recommended.rules,
-        ...reactPlugin.configs.recommended.rules,
-        ...reactPlugin.configs['jsx-runtime'].rules,
-        ...reactHooksPlugin.configs.recommended.rules,
-        ...prettierPlugin.configs.recommended.rules,
-        'react/jsx-no-target-blank': 'off',
-        'react-refresh/only-export-components': [
-            'warn',
-            { allowConstantExport: true },
-        ],
-        'indent': ['error', 4],
-        'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-        'prettier/prettier': 'error',
+      'react/jsx-no-target-blank': 'off',
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+      indent: ['error', 4],
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      ...js.configs.recommended.rules,
+      ...reactPlugin.configs.recommended.rules,
+      ...reactPlugin.configs['jsx-runtime'].rules,
+      ...reactHooksPlugin.configs.recommended.rules,
     },
-};
+    files: ['**/*.{js,jsx,json,css,scss,md}'],
+    plugins: {
+      prettier: prettierPlugin,
+    },
+    rules: {
+      'prettier/prettier': 'error',
+    },
+  };
