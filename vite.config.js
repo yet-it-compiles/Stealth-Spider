@@ -29,6 +29,10 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
     root: './',
     base: '/',
+    test: {
+        globals: true,
+        environment: 'node',
+    },
     server: {
         host: true,
         port: 4000,
@@ -58,24 +62,28 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@': '/src',
-            'components': '/src/components',
-            'utils': '/src/utils',
+            '@': '/frontend',
+            'components': '/frontend/components',
+            'utils': '/frontend/utils',
         },
     },
     css: {
         preprocessorOptions: {
             scss: {
-                additionalData: `@import './src/styles/variables.scss';`,
-            },
+                additionalData: `
+                    @import './frontend/styles/styles.scss';
+                    @import './frontend/styles/_mixins.scss';
+                    @import './frontend/styles/_variables.scss';
+            `,
         },
     },
+},
     plugins: [
         react(),
         eslint({
             failOnError: false,
-            include: ['src/**/*.js', 'src/**/*.jsx'],
-            overrideConfigFile: './eslint.config.js',
+            include: ['frontend/**/*.js', 'src/**/*.jsx'],
+            overrideConfigFile: './.configs/eslint.config.js',
         }),
         svgr(),
     ],
